@@ -132,34 +132,32 @@ ComputerPlayer.findAllTwoInARow = function (board, letter) {
     // Check horizontal 2 in a row
     for (i = 0; i < 3; i++) {
         if (board.getTile(i, 0).player == letter && board.getTile(i, 1).player == letter && board.getTile(i, 2).unset()) {
-            twoInARows[j] = new TwoInARow(i, 0, TwoInARow.HORIZONTAL);
+            twoInARows[j] = new TwoInARow(i, 0, TwoInARow.HORIZONTAL, i, 2);
             j++;
         }
         else if (board.getTile(i, 1).player == letter && board.getTile(i, 2).player == letter && board.getTile(i, 0).unset()) {
-            twoInARows[j] = new TwoInARow(i, 1, TwoInARow.HORIZONTAL);
+            twoInARows[j] = new TwoInARow(i, 1, TwoInARow.HORIZONTAL, i, 0);
+            j++;
+        }
+        else if (board.getTile(i, 0).player == letter && board.getTile(i, 2).player == letter && board.getTile(i, 1).unset()) {
+            twoInARows[j] = new TwoInARow(i, 0, TwoInARow.HORIZONTAL, i, 1);
             j++;
         }
     }
 
-    if (j == 0) {
-        // Didn't find one horizontally, check vertically
-        for (i = 0; i < 3; i++) {
-            if (board.getTile(0, i).player == letter && board.getTile(1, i).player == letter && board.getTile(2, i).unset()) {
-                twoInARows[j] = new TwoInARow(0, i, TwoInARow.VERTICAL);
-                j++;
-            }
-            else if (board.getTile(1, i).player == letter && board.getTile(2, i).player == letter && board.getTile(0, i).unset()) {
-                twoInARows[j] = new TwoInARow(1, i, TwoInARow.VERTICAL);
-                j++;
-            }
-            else if (board.getTile(2, 0).player == letter && board.getTile(1, 1).player == letter && board.getTile(0, 2).unset()) {
-                twoInARows[j] = new TwoInARow(2, 0, TwoInARow.DIAGONAL);
-                j++
-            }
-            else if (board.getTile(1, 1).player == letter && board.getTile(0, 2).player == letter && board.getTile(2, 0).unset()) {
-                twoInARows[j] = new TwoInARow(1, 1, TwoInARow.DIAGONAL);
-                j++
-            }
+    // Didn't find one horizontally, check vertically
+    for (i = 0; i < 3; i++) {
+        if (board.getTile(0, i).player == letter && board.getTile(1, i).player == letter && board.getTile(2, i).unset()) {
+            twoInARows[j] = new TwoInARow(0, i, TwoInARow.VERTICAL, 2, i);
+            j++;
+        }
+        else if (board.getTile(1, i).player == letter && board.getTile(2, i).player == letter && board.getTile(0, i).unset()) {
+            twoInARows[j] = new TwoInARow(1, i, TwoInARow.VERTICAL, 0, i);
+            j++;
+        }
+        else if (board.getTile(0, i).player == letter && board.getTile(2, i).player == letter && board.getTile(1, i).unset()) {
+            twoInARows[j] = new TwoInARow(0, i, TwoInARow.VERTICAL, 1, i);
+            j++
         }
     }
 
@@ -314,7 +312,7 @@ BlockForkStrategy.prototype.play = function () {
 
     var copyOfBoard = null, i, j, opponentForkStrategy, forkedTile;
 
-    // Look for a place to put our letter such that it does not open up an opponent fork.
+    // Look for places that the opponent could use a fork against us and block it.
     for (i = 0; i < 3; i++) {
         for (j = 0; j < 3; j++) {
             copyOfBoard = this.board.copyBoard();
@@ -332,29 +330,6 @@ BlockForkStrategy.prototype.play = function () {
                     this.board.setTileXorO(forkedTile.row, forkedTile.col, this.myLetter);
                     return true;
                 }
-            }
-        }
-    }
-
-    // Check to see if there is a configuration where opponent can fork without us having done
-    // a move yet.
-
-    for (i = 0; i < 3; i++) {
-        for (j = 0; j < 3; j++) {
-            copyOfBoard = this.board.copyBoard();
-
-            // We add a listener to the copied game board.  If the event is fired, it means
-            // that the ForkStrategy object below was able to make a play.  Our listener
-            // will capture the location where the play was made.
-            forkedTile = null;
-            copyOfBoard.addListener(function (event) {
-                forkedTile = event;
-            });
-            opponentForkStrategy = new ForkStrategy(copyOfBoard, this.opponentLetter);
-            if (opponentForkStrategy.play()) {
-                // Instead - we play our piece where the human would've played their piece.
-                this.board.setTileXorO(forkedTile.row, forkedTile.col, this.myLetter);
-                return true;
             }
         }
     }

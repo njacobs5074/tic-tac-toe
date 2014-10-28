@@ -224,3 +224,63 @@ describe('ComputerStrategy COMPUTER IS X - Tests for tic-tac-toe-0001', function
 
     });
 });
+
+describe('ComputerStrategy COMPUTER IS X - Tests for tic-tac-toe-0002', function() {
+    var board = new TicTacToeBoard();
+    var game = new TicTacToeGame(board);
+    var computerPlayer = new Player("COMPUTER", "O");
+    var computer = new ComputerPlayer(board, game, computerPlayer);
+    var computerWon, playerWon, wasDraw;
+
+    beforeEach(function () {
+        game.addListener(function (event) {
+            computerWon = false;
+            playerWon = false;
+            wasDraw = false;
+
+            if (event.gamestate == TicTacToeGame.WE_HAVE_A_WINNER) {
+                computerWon = event.winner == "X";
+                playerWon = event.winner == "O";
+            }
+            else if (event.gamestate == TicTacToeGame.PLAYED_TO_A_DRAW) {
+                wasDraw = true;
+            }
+        });
+
+        game.addListener(function (event) {
+            console.log(event.toString());
+            console.log(event.board.toStringBoard());
+        })
+    });
+
+    afterEach(function () {
+        board.reset();
+        game.reset();
+        computer.reset(computerPlayer);
+    });
+
+    it('should be that we play to a draw', function() {
+        computer.start();
+
+        board.setTileXorO(0, 0, "X");
+        expect(computerWon).toBeFalsy();
+        expect(playerWon).toBeFalsy();
+
+        board.setTileXorO(2, 2, "X");
+        expect(computerWon).toBeFalsy();
+        expect(playerWon).toBeFalsy();
+
+        board.setTileXorO(0, 2, "X");
+        expect(computerWon).toBeFalsy();
+        expect(playerWon).toBeFalsy();
+
+        board.setTileXorO(2, 1, "X");
+        expect(computerWon).toBeFalsy();
+        expect(playerWon).toBeFalsy();
+
+        board.setTileXorO(1, 0, "X");
+        expect(computerWon).toBeFalsy();
+        expect(playerWon).toBeFalsy();
+        expect(wasDraw).toBeTruthy();
+    });
+});

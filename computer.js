@@ -327,7 +327,7 @@ BlockForkStrategy.prototype.play = function () {
                 });
                 opponentForkStrategy = new ForkStrategy(copyOfBoard, this.opponentLetter);
                 if (opponentForkStrategy.play()) {
-                    this.board.setTileXorO(forkedTile.row, forkedTile.col, this.myLetter);
+                    this.board.setTileXorO(i, j, this.myLetter);
                     return true;
                 }
             }

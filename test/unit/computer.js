@@ -270,11 +270,36 @@ describe('ComputerStrategy COMPUTER IS X - Tests for tic-tac-toe-0002', function
         expect(computerWon).toBeFalsy();
         expect(playerWon).toBeFalsy();
 
+        board.setTileXorO(2, 1, "X");
+        expect(computerWon).toBeFalsy();
+        expect(playerWon).toBeFalsy();
+
         board.setTileXorO(0, 2, "X");
         expect(computerWon).toBeFalsy();
         expect(playerWon).toBeFalsy();
 
+        board.setTileXorO(1, 0, "X");
+        expect(computerWon).toBeFalsy();
+        expect(playerWon).toBeFalsy();
+        expect(wasDraw).toBeTruthy();
+    });
+
+    it('shold be that we play to a draw', function() {
+       computer.start();
+
+        board.setTileXorO(2, 2, "X");
+        expect(computerWon).toBeFalsy();
+        expect(playerWon).toBeFalsy();
+
+        board.setTileXorO(0, 0, "X");
+        expect(computerWon).toBeFalsy();
+        expect(playerWon).toBeFalsy();
+
         board.setTileXorO(2, 1, "X");
+        expect(computerWon).toBeFalsy();
+        expect(playerWon).toBeFalsy();
+
+        board.setTileXorO(0, 2, "X");
         expect(computerWon).toBeFalsy();
         expect(playerWon).toBeFalsy();
 

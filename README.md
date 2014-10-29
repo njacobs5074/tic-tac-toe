@@ -8,13 +8,15 @@ for draws.
 
 You can play it [here](http://njacobs5074.github.io/tic-tac-toe/)!
 
-By the way, the computer's strategy is an implement of Newell and Simon's [1972 tic tic toe algorithm](http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy).
+By the way, the computer's strategy is an implementation of Newell and Simon's [1972 tic tic toe algorithm](http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy).
+
+The rest of this page discusses how to fork this repository - which is basically the same as forking angular-seed.
 
 ## Getting Started
 
 NB: This repository is based on the AngularJS seed project ([angular-seed](https://github.com/angular/angular-seed)).
 
-To get you started you can simply clone the tic-tac-toe repository and install the dependencies:
+To get you started you can simply clone this repository and install the dependencies:
 
 ### Prerequisites
 
